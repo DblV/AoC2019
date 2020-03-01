@@ -9,6 +9,8 @@ Debug
 obj
 bin
 
+### Ionide ###
+.ionide/symbolCache.db
 
 ### Linux ###
 *~
