@@ -13,4 +13,7 @@ jobs:
       with:
         dotnet-version: 3.1.100
     - name: Build with dotnet
-      run: dotnet build -c Release src/AdventOfCode2019/AdventOfCode2019.fsproj
+      run: dotnet build -c Release src
+    - name: Test with Nunit
+      run: dotnet test src
+
