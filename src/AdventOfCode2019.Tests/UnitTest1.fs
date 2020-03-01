@@ -10,7 +10,4 @@ let Setup () =
 let Test1 () =
     Assert.Pass()
 
-[<Test>]
-let Test2 () =
-    Assert.True(false)
     
