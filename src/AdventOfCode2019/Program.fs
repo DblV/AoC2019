@@ -1,8 +1,8 @@
-﻿// Learn more about F# at http://fsharp.org
-
-open System
+﻿module Main
 
 [<EntryPoint>]
 let main argv =
-    printfn "Hello World from F#!"
-    0 // return an integer exit code
+    match argv.[0] with
+    | "1" -> printfn "%i" (DayOne.calculateTotalFuel (Lib.readLines argv.[1]))
+    | _ -> printfn "Invalid option"
+    0
