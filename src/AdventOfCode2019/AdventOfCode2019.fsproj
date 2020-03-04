@@ -4,8 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="lib.fs" />
-    <Compile Include="day1.fs" />
+    <Compile Include="Lib.fs" />
+    <Compile Include="FuelCalculator.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 </Project>

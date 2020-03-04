@@ -14,12 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="day1tests.fs" />
+    <Compile Include="FuelCalculatorTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="day1testdata.txt">
+    <Content Include="fuelCalcTestData.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>  
   </ItemGroup>
