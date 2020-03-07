@@ -1,1 +1,1 @@
-src\AdventOfCode2019\bin\Release\netcoreapp3.1\AdventOfCode2019.exe %1 %2
+src\AdventOfCode2019\bin\Release\netcoreapp3.1\AdventOfCode2019.exe %1 %2 %3
