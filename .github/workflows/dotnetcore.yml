@@ -12,8 +12,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.100
+    - name: Grab dotnet build tools
+      run: dotnet tool restore
     - name: Build with dotnet
       run: dotnet build -c Release src
     - name: Test with Nunit
-      run: dotnet test src
+      run: dotnet test src --logger:"console;verbosity=detailed"
 
