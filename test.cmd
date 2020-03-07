@@ -1,1 +1,1 @@
-dotnet test src
+dotnet test src --logger:"console;verbosity=detailed"

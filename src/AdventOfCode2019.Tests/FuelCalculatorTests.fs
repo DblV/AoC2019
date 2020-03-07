@@ -1,4 +1,4 @@
-module AdventOfCode2019.Tests
+module FuelCalculatorTests
 
 open NUnit.Framework
 open FuelCalculator
