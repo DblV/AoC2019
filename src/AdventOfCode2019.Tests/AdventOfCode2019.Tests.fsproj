@@ -17,6 +17,7 @@
     <Compile Include="FuelCalculatorTests.fs" />
     <Compile Include="FuelManagementSystemTests.fs" />
     <Compile Include="IntcodeTests.fs" />
+    <Compile Include="PasswordCrackerTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
