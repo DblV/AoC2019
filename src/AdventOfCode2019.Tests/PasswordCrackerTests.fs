@@ -7,7 +7,10 @@ open PasswordCracker
 let Setup () =
     ()
 
-[<TestCase("111111", true)>]
+[<TestCase("111111", false)>]
+[<TestCase("111122", true)>]
+[<TestCase("112233", true)>]
+[<TestCase("123444", false)>]
 [<TestCase("223450", false)>]
 [<TestCase("123789", false)>]
 [<TestCase("443200", false)>]
