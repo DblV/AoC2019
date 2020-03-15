@@ -3,7 +3,7 @@ module Intcode
 open FSharp.Data
 
 type ParameterMode = Position | Immediate
-type OpCode = Add | Multiply | Input | Output | JumpIfTrue | JumpIfFalse | Halt
+type OpCode = Add | Multiply | Input | Output | JumpIfTrue | JumpIfFalse | LessThan | Equals | Halt
 
 type Instruction = {
     opCode: OpCode;
@@ -19,6 +19,8 @@ let parseOpCode opCode =
     | "04" -> Output
     | "05" -> JumpIfTrue
     | "06" -> JumpIfFalse
+    | "07" -> LessThan
+    | "08" -> Equals
     | _ -> Halt
 
 let parseMode mode = 
@@ -43,6 +45,7 @@ let memoryLookup (memory:int list) mode address =
     | Immediate -> memory.[address]
 
 let replaceValue replaceValueAt replaceValueWith memory =
+    printfn "replaceValue %i with %i in %A" replaceValueAt replaceValueWith memory
     memory
     |> List.mapi (fun i x -> if i = replaceValueAt then replaceValueWith else x)
 
@@ -84,6 +87,28 @@ let rec runIntcodeComputer address (memory:int list) (inputValue:int) =
         runIntcodeComputer
             (if addressTest = 0 then (memoryLookup memory instruction.param2Mode (address + 2)) else (address + 3))
             memory
+            inputValue
+    | LessThan ->
+        let firstParam = (memoryLookup memory instruction.param1Mode (address + 1))
+        let secondParam = (memoryLookup memory instruction.param2Mode (address + 2))
+        runIntcodeComputer
+            (address + 4)
+            (if firstParam < secondParam then
+                printfn "%i less than %i" firstParam secondParam
+                (replaceValue (memoryLookup memory Immediate (address + 3)) 1 memory)
+            else
+                printfn "%i not less than %i" firstParam secondParam
+                (replaceValue (memoryLookup memory Immediate (address + 3)) 0 memory))
+            inputValue
+    | Equals ->
+        let firstParam = (memoryLookup memory instruction.param1Mode (address + 1))
+        let secondParam = (memoryLookup memory instruction.param2Mode (address + 2))
+        runIntcodeComputer
+            (address + 4)
+            (if firstParam = secondParam then
+                (replaceValue (memoryLookup memory Immediate (address + 3)) 1 memory)
+            else
+                (replaceValue (memoryLookup memory Immediate (address + 3)) 0 memory))
             inputValue
     | Halt -> 
         (memory,inputValue)
