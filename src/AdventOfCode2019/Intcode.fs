@@ -48,7 +48,7 @@ let replaceValue replaceValueAt replaceValueWith memory =
     memory
     |> List.mapi (fun i x -> if i = replaceValueAt then replaceValueWith else x)
 
-let rec runIntcodeComputer address (memory:int list) (inputValue:int) =
+let rec runIntcodeComputer address (memory:int list) (inputValue:int) (outputValues:int list) =
     let instruction = parseInstruction memory.[address]
     match instruction.opCode with
     | Add ->
@@ -57,35 +57,42 @@ let rec runIntcodeComputer address (memory:int list) (inputValue:int) =
             (address + 4) 
             (replaceValue (memoryLookup memory Immediate (address + 3)) replaceValueWith memory)
             inputValue
+            outputValues
     | Multiply -> 
         let replaceValueWith = (memoryLookup memory instruction.param1Mode (address + 1)) * (memoryLookup memory instruction.param2Mode (address + 2))
         runIntcodeComputer 
             (address + 4) 
             (replaceValue (memoryLookup memory Immediate (address + 3)) replaceValueWith memory)
             inputValue
+            outputValues
     | Input -> 
         runIntcodeComputer 
             (address + 2) 
             (replaceValue (memoryLookup memory Immediate (address + 1)) inputValue memory)
             inputValue
+            outputValues
     | Output -> 
-        printfn "OUTPUT: %i" (memoryLookup memory instruction.param1Mode (address + 1))
+        let outputValue = (memoryLookup memory instruction.param1Mode (address + 1))
+        printfn "OUTPUT: %i" outputValue
         runIntcodeComputer 
             (address + 2)
             memory
             inputValue
+            (outputValues@[outputValue])
     | JumpIfTrue ->
         let addressTest = (memoryLookup memory instruction.param1Mode (address + 1))
         runIntcodeComputer
             (if addressTest > 0 then (memoryLookup memory instruction.param2Mode (address + 2)) else (address + 3))
             memory
             inputValue
+            outputValues
     | JumpIfFalse ->
         let addressTest = (memoryLookup memory instruction.param1Mode (address + 1))
         runIntcodeComputer
             (if addressTest = 0 then (memoryLookup memory instruction.param2Mode (address + 2)) else (address + 3))
             memory
             inputValue
+            outputValues
     | LessThan ->
         let firstParam = (memoryLookup memory instruction.param1Mode (address + 1))
         let secondParam = (memoryLookup memory instruction.param2Mode (address + 2))
@@ -96,6 +103,7 @@ let rec runIntcodeComputer address (memory:int list) (inputValue:int) =
             else
                 (replaceValue (memoryLookup memory Immediate (address + 3)) 0 memory))
             inputValue
+            outputValues
     | Equals ->
         let firstParam = (memoryLookup memory instruction.param1Mode (address + 1))
         let secondParam = (memoryLookup memory instruction.param2Mode (address + 2))
@@ -106,13 +114,14 @@ let rec runIntcodeComputer address (memory:int list) (inputValue:int) =
             else
                 (replaceValue (memoryLookup memory Immediate (address + 3)) 0 memory))
             inputValue
+            outputValues
     | Halt -> 
-        (memory,inputValue)
+        (memory,inputValue,outputValues)
 
 let rec searchForOutput noun verb target memory =
     // Exec program with new settings for noun and verb
     let setMemory = (replaceValue 1 noun) >> (replaceValue 2 verb)
-    let (outputMemory, _) = runIntcodeComputer 0 (setMemory memory) 0
+    let (outputMemory, _, _) = runIntcodeComputer 0 (setMemory memory) 0 List<int>.Empty
 
     // Examine position 0 - if it matches our target, return the noun and verb used to produce this
     match outputMemory.[0] with
@@ -133,7 +142,7 @@ let initialiseMemoryFromString inputString =
     | None -> List<int>.Empty
 
 let runIntcodeComputerFromStringInputWithInitialInput inputString initialInput =
-    runIntcodeComputer 0 (initialiseMemoryFromString inputString) initialInput
+    runIntcodeComputer 0 (initialiseMemoryFromString inputString) initialInput List<int>.Empty
 
 let runIntcodeComputerFromStringInput inputString =
     runIntcodeComputerFromStringInputWithInitialInput inputString 0
