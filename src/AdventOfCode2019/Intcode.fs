@@ -45,13 +45,11 @@ let memoryLookup (memory:int list) mode address =
     | Immediate -> memory.[address]
 
 let replaceValue replaceValueAt replaceValueWith memory =
-    printfn "replaceValue %i with %i in %A" replaceValueAt replaceValueWith memory
     memory
     |> List.mapi (fun i x -> if i = replaceValueAt then replaceValueWith else x)
 
 let rec runIntcodeComputer address (memory:int list) (inputValue:int) =
     let instruction = parseInstruction memory.[address]
-    printfn "Instruction: %A" instruction
     match instruction.opCode with
     | Add ->
         let replaceValueWith = (memoryLookup memory instruction.param1Mode (address + 1)) + (memoryLookup memory instruction.param2Mode (address + 2))
@@ -75,7 +73,7 @@ let rec runIntcodeComputer address (memory:int list) (inputValue:int) =
         runIntcodeComputer 
             (address + 2)
             memory
-            (memoryLookup memory Position (address + 1))
+            inputValue
     | JumpIfTrue ->
         let addressTest = (memoryLookup memory instruction.param1Mode (address + 1))
         runIntcodeComputer
@@ -94,10 +92,8 @@ let rec runIntcodeComputer address (memory:int list) (inputValue:int) =
         runIntcodeComputer
             (address + 4)
             (if firstParam < secondParam then
-                printfn "%i less than %i" firstParam secondParam
                 (replaceValue (memoryLookup memory Immediate (address + 3)) 1 memory)
             else
-                printfn "%i not less than %i" firstParam secondParam
                 (replaceValue (memoryLookup memory Immediate (address + 3)) 0 memory))
             inputValue
     | Equals ->

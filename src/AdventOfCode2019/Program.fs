@@ -15,5 +15,6 @@ let main argv =
     | "3.1" -> printfn "%A" (calculateBestIntersections (Lib.readLines argv.[1]))
     | "4.1" -> printfn "%A" (countValidPasswordsInRange 367479 893698)
     | "5.1" -> printfn "%A" (runIntcodeComputerFromStringInputWithInitialInput (Lib.readLines argv.[1] |> Seq.head) 1)
+    | "5.2" -> printfn "%A" (runIntcodeComputerFromStringInputWithInitialInput (Lib.readLines argv.[1] |> Seq.head) (argv.[2] |> int))
     | _ -> printfn "Invalid option"
     0
