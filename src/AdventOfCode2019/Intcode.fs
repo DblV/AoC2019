@@ -3,7 +3,7 @@ module Intcode
 open FSharp.Data
 
 type ParameterMode = Position | Immediate
-type OpCode = Add | Multiply | Input | Output | Halt
+type OpCode = Add | Multiply | Input | Output | JumpIfTrue | JumpIfFalse | Halt
 
 type Instruction = {
     opCode: OpCode;
@@ -17,6 +17,8 @@ let parseOpCode opCode =
     | "02" -> Multiply
     | "03" -> Input
     | "04" -> Output
+    | "05" -> JumpIfTrue
+    | "06" -> JumpIfFalse
     | _ -> Halt
 
 let parseMode mode = 
@@ -71,6 +73,18 @@ let rec runIntcodeComputer address (memory:int list) (inputValue:int) =
             (address + 2)
             memory
             (memoryLookup memory Position (address + 1))
+    | JumpIfTrue ->
+        let addressTest = (memoryLookup memory instruction.param1Mode (address + 1))
+        runIntcodeComputer
+            (if addressTest > 0 then (memoryLookup memory instruction.param2Mode (address + 2)) else (address + 3))
+            memory
+            inputValue
+    | JumpIfFalse ->
+        let addressTest = (memoryLookup memory instruction.param1Mode (address + 1))
+        runIntcodeComputer
+            (if addressTest = 0 then (memoryLookup memory instruction.param2Mode (address + 2)) else (address + 3))
+            memory
+            inputValue
     | Halt -> 
         (memory,inputValue)
 

@@ -47,12 +47,24 @@ let Opcode4OutputCorrect () =
     compareResultingListAndOutput [104;2;99] 99 (runIntcodeComputerFromStringInputWithInitialInput "104,2,99" 3)
 
 [<Test>]
+let Opcode5OutputCorrect () =
+    compareResultingList [105;0;0;99] (runIntcodeComputerFromStringInput "105,0,0,99")
+    compareResultingList [5;2;3;7;0;0;0;99] (runIntcodeComputerFromStringInput "5,2,3,7,0,0,0,99")
+
+[<Test>]
+let Opcode6OutputCorrect () =
+    compareResultingList [106;5;5;99] (runIntcodeComputerFromStringInput "106,5,5,99")
+    compareResultingList [6;4;5;0;0;7;0;99] (runIntcodeComputerFromStringInput "6,4,5,0,0,7,0,99")
+
+[<Test>]
 let MultipleOpcodeInputOutputsCorrect () =
     compareResultingList [30;1;1;4;2;5;6;0;99] (runIntcodeComputerFromStringInput "1,1,1,4,99,5,6,0,99")
     compareResultingList [3500;9;10;70;2;3;11;0;99;30;40;50] (runIntcodeComputerFromStringInput "1,9,10,3,2,3,11,0,99,30,40,50")
     compareResultingList [101;9;10;90;1001;3;11;0;99;9;5] (runIntcodeComputerFromStringInput "11102,9,10,3,1001,3,11,0,99,9,5")
     compareResultingListAndOutput [901;3;1001;2;-100;0;99] 2 (runIntcodeComputerFromStringInputWithInitialInput "3,3,1001,1,-100,0,99" 2)
     compareResultingListAndOutput [11102;-1;-100;100;4;3;99] 100 (runIntcodeComputerFromStringInputWithInitialInput "11102,-1,-100,3,4,3,99" 1)
+    compareResultingListAndOutput [1105;1;5;0;0;1;0;1;1106;4;8;99] 1106 (runIntcodeComputerFromStringInputWithInitialInput "1105,1,5,0,0,1,0,1,8,4,8,99" -1)
+    compareResultingList [99;100;-1;0;1106;0;0] (runIntcodeComputerFromStringInput "1101,100,-1,0,1106,0,0")
 
 [<TestCase("1,0,0,0,99",2,0)>]
 [<TestCase("1,0,0,0,99",198,404)>]
