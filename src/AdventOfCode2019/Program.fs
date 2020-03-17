@@ -18,5 +18,6 @@ let main argv =
     | "5.1" -> printfn "%A" (runIntcodeComputerFromStringInputWithInitialInput (Lib.readLines argv.[1] |> Seq.head) 1)
     | "5.2" -> printfn "%A" (runIntcodeComputerFromStringInputWithInitialInput (Lib.readLines argv.[1] |> Seq.head) (argv.[2] |> int))
     | "6.1" -> printfn "%A" (countAllOrbits (Lib.readLines argv.[1]))
+    | "6.2" -> printfn "%A" (calculateShortestHop (Lib.readLines argv.[1]))
     | _ -> printfn "Invalid option"
     0

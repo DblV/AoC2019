@@ -14,17 +14,31 @@ let findAllNodes orbitMap =
     |> List.groupBy id
     |> List.map (fun y -> (fst y))
 
-let rec countOrbitsForNode fullOrbitMap remainingOrbitMap count node =
+let rec getOrbitalPath fullOrbitMap remainingOrbitMap orbitalPath node =
     match remainingOrbitMap with
-    | [] -> count
+    | [] -> orbitalPath
     | h::t ->
         if (snd h) = node then
-            countOrbitsForNode fullOrbitMap fullOrbitMap (count+1) (fst h)
+            getOrbitalPath fullOrbitMap fullOrbitMap (orbitalPath@[fst h]) (fst h)
         else
-            countOrbitsForNode fullOrbitMap t count node
+            getOrbitalPath fullOrbitMap t orbitalPath node
+
+let getOrbitalPath' orbitMap =
+    getOrbitalPath orbitMap orbitMap List<string>.Empty
 
 let countAllOrbits data =
     let orbitMap = parseMapData data
 
     findAllNodes orbitMap
-    |> List.sumBy (countOrbitsForNode orbitMap orbitMap 0)
+    |> List.map (getOrbitalPath' orbitMap)
+    |> List.sumBy (fun x -> x.Length)
+
+let calculateShortestHop data =
+    let orbitMap = parseMapData data
+    let youPath = getOrbitalPath' orbitMap "YOU"
+    let santaPath = getOrbitalPath' orbitMap "SAN"
+
+    youPath@santaPath
+    |> List.countBy id
+    |> List.filter (fun x -> (snd x) = 1)
+    |> List.length

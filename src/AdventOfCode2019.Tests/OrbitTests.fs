@@ -31,3 +31,11 @@ let OrbitCountTests () =
     Assert.AreEqual(10, countAllOrbits ["COM)A";"A)B";"B)C";"C)D"])
     Assert.AreEqual(22, countAllOrbits ["A)B";"B)C";"COM)A";"C)D";"B)E";"D)G";"E)F"])
     Assert.AreEqual(42, (countAllOrbits ["COM)B";"B)C";"C)D";"D)E";"E)F";"B)G";"G)H";"D)I";"E)J";"J)K";"K)L)"]))
+
+[<Test>]
+let ShortestDistanceTests () =
+    Assert.AreEqual(1, calculateShortestHop ["COM)A";"COM)YOU";"A)SAN"])
+    Assert.AreEqual(2, calculateShortestHop ["COM)A";"A)B";"A)C";"A)D";"D)YOU";"B)SAN"])
+    Assert.AreEqual(4, calculateShortestHop ["COM)A";"A)B";"B)C";"C)D";"D)SAN";"COM)YOU"])
+    Assert.AreEqual(2, calculateShortestHop ["A)B";"B)C";"COM)A";"C)D";"B)E";"D)G";"E)F";"G)YOU";"C)SAN"])
+    Assert.AreEqual(4, (calculateShortestHop ["COM)B";"B)C";"C)D";"D)E";"E)F";"B)G";"G)H";"D)I";"E)J";"J)K";"K)L)";"K)YOU";"I)SAN"]))
