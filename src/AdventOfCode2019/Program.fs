@@ -4,6 +4,7 @@ open FuelCalculator
 open FuelManagementSystem
 open Intcode
 open PasswordCracker
+open Orbits
 
 [<EntryPoint>]
 let main argv =
@@ -16,5 +17,6 @@ let main argv =
     | "4.1" -> printfn "%A" (countValidPasswordsInRange 367479 893698)
     | "5.1" -> printfn "%A" (runIntcodeComputerFromStringInputWithInitialInput (Lib.readLines argv.[1] |> Seq.head) 1)
     | "5.2" -> printfn "%A" (runIntcodeComputerFromStringInputWithInitialInput (Lib.readLines argv.[1] |> Seq.head) (argv.[2] |> int))
+    | "6.1" -> printfn "%A" (countAllOrbits (Lib.readLines argv.[1]))
     | _ -> printfn "Invalid option"
     0
